@@ -1,0 +1,38 @@
+{
+  "performance_functions": {
+    "accuracy": ["trimf", "trimf", "trimf"],
+    "precision": ["trimf", "trimf", "trimf"],
+    "recall": ["trimf", "trimf", "trimf"],
+    "f1": ["trimf", "trimf", "trimf"],
+    "auc": ["trapmf", "trimf", "trimf"],
+    "rand": ["trimf", "trimf", "trimf"],
+    "adjusted_rand": ["trimf", "trimf", "trimf"],
+    "silhouette": ["trapmf", "trimf", "trimf"],
+    "calinski_harabasz": ["trapmf", "trimf"],
+    "davies_bouldin": ["trimf", "trapmf"]
+  },
+  "performance_params": {
+    "accuracy": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "precision": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "recall": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "f1": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "auc": [[0, 0, 0.5, 0.75], [0.5, 0.75, 1], [0.75, 1, 1]],
+    "rand": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "adjusted_rand": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "silhouette": [[-1, -1, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
+    "calinski_harabasz": [[0, 0, 10, 100], [10, 100, 100]],
+    "davies_bouldin": [[10, 100, 100], [0, 0, 10, 100]]
+  },
+  "performance_minmax": {
+    "accuracy": [0, 1],
+    "precision": [0, 1],
+    "recall": [0, 1],
+    "f1": [0, 1],
+    "auc": [0, 1],
+    "rand": [0, 1],
+    "adjusted_rand": [0, 1],
+    "silhouette": [-1, 1],
+    "calinski_harabasz": [0, 100],
+    "davies_bouldin": [0, 100]
+  }
+}
