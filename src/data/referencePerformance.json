@@ -8,8 +8,8 @@
     "rand": ["trimf", "trimf", "trimf"],
     "adjusted_rand": ["trimf", "trimf", "trimf"],
     "silhouette": ["trapmf", "trimf", "trimf"],
-    "calinski_harabasz": ["trapmf", "trimf"],
-    "davies_bouldin": ["trimf", "trapmf"]
+    "calinski_harabasz": ["trapmf", "trimf", "trapmf"],
+    "davies_bouldin": ["trapmf", "trimf", "trapmf"]
   },
   "performance_params": {
     "accuracy": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
@@ -20,8 +20,8 @@
     "rand": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
     "adjusted_rand": [[0, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
     "silhouette": [[-1, -1, 0, 0.5], [0, 0.5, 1], [0.5, 1, 1]],
-    "calinski_harabasz": [[0, 0, 10, 100], [10, 100, 100]],
-    "davies_bouldin": [[10, 100, 100], [0, 0, 10, 100]]
+    "calinski_harabasz": [[0, 0, 1, 5], [1, 5, 10], [5, 10, 100, 100]],
+    "davies_bouldin": [[5, 10, 100, 100], [1, 5, 10], [0, 0, 1, 5]]
   },
   "performance_minmax": {
     "accuracy": [0, 1],
