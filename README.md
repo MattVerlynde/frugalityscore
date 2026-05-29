@@ -10,6 +10,7 @@ This repository contains the code for the python package frugalityscore, associa
 - [Installation](#install)
   - [Dependencies](#dependencies)
 - [Usage](#use)
+- [Reproducibility](#reproducibility)
 - [References](#references)
 
 
@@ -151,3 +152,7 @@ pip install frugalityscore
                                      plot=plot, 
                                      defuzz=defuzz))
 ```
+
+## Reproducibility <a name="reproducibility"></a>
+
+The documentation to reproduce the results of the associated paper is available [**HERE**](doc/README.md)

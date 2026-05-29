@@ -1,65 +1,48 @@
 import numpy as np
 
-def mom(universe:list, output:list):
-    res = []
-    max_mx = output[0]
-    for i, mx in enumerate(output):
-        if mx > max_mx:
-            max_mx = mx
-            res = [universe[i]]
-        elif mx == max_mx:
-            res.append(universe[i])
-    return sum(res)/len(res)
+def mom(universe:np.ndarray, output:np.ndarray):
+    """Mean of Maximum (MOM) defuzzification method."""
+    max_value = np.max(output)
+    return np.mean(universe[output == max_value])
 
-def lom(universe:list, output:list):
-    max_mx = output[0]
-    for i, mx in enumerate(output):
-        if mx >= max_mx:
-            max_mx = mx
-            res=universe[i]
-    return res
+def lom(universe:np.ndarray, output:np.ndarray):
+    """Last of Maximum (LOM) defuzzification method."""
+    max_value = np.max(output)
+    return universe[np.where(output == max_value)[0][-1]]
 
-def som(universe:list, output:list):
-    max_mx = output[0]
-    for i, mx in enumerate(output):
-        if mx > max_mx:
-            max_mx = mx
-            res=universe[i]
-    return res
+def som(universe:np.ndarray, output:np.ndarray):
+    """First of Maximum (SOM) defuzzification method."""
+    max_value = np.max(output)
+    return universe[np.where(output == max_value)[0][0]]
 
-def centroid(universe:list, output:list):
-    sum_xmx = 0
-    sum_mx = 0
-    for i, mx in enumerate(output):
-        x=universe[i]
-        sum_xmx += x*mx
-        sum_mx += mx
+def centroid(universe:np.ndarray, output:np.ndarray):
+    """Centroid defuzzification method."""
+    sum_mx = np.sum(output)
+    if sum_mx == 0:
+        return universe[len(universe)//2]
+    sum_xmx = np.dot(universe, output)
     return sum_xmx/sum_mx
 
-def bisector(universe:list, output:list):
+def bisector(universe:np.ndarray, output:np.ndarray):
+    """Bisector defuzzification method."""
     sum_area = 0
     area_acc = [0]
     for i in range(1,len(output)):
         x1, x2 = universe[i-1], universe[i]
         mx1, mx2 = output[i-1], output[i]
-        if mx1 == mx2:
-            area = mx1*(x2 - x1)
-        else:
-            area = (mx1 + mx2)*(x2 - x1)/2
-        sum_area += area
-        area_acc.append(sum_area)
+        area_acc[i] = area_acc[i-1] + (mx1 + mx2)*(x2 - x1)/2
+    half_area = area_acc[-1]/2
+    if half_area == 0:
+        return universe[len(universe)//2]
 
     i = 0
-    while area_acc[i] < sum_area/2:
+    while area_acc[i] < half_area:
         i+=1
     x1, x2 = universe[i-1], universe[i]
     mx1, mx2 = output[i-1], output[i]
-    subarea = (sum_area/2) - area_acc[i-1]
-    if mx1 == mx2:
-        return x1 + subarea/mx1
-    else:
-        area = (mx1 + mx2)*(x2 - x1)/2
-        return (x1 - (mx1-np.sqrt(mx1*mx1 + 2.0*area*subarea)) / area)
+    subarea = half_area - area_acc[i-1]
+    area = (mx1 + mx2)*(x2 - x1)/2
+    return (x1 - (mx1-np.sqrt(mx1*mx1 + 2.0*area*subarea)) / area)
 
 defuzz_functions = {
     'mom': mom,
@@ -69,7 +52,9 @@ defuzz_functions = {
     'bisector': bisector
 }
 
-def defuzz(mode:str, universe:list, output:list):
+def defuzz(mode:str, universe:np.ndarray, output:np.ndarray) -> float:
+    if mode not in defuzz_functions:
+        raise ValueError(f"Defuzzification method '{mode}' is not defined.")
     return defuzz_functions[mode](universe,output)
 
 if __name__ == "__main__":

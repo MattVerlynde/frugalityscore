@@ -33,17 +33,19 @@ class FuzzySystem():
         """
         Checking rule definition follow the number of invar and outvar domains
         """
-        assert len(self.out_domains) == self.outvar.num_domains
+        if len(self.out_domains) != self.outvar.num_domains:
+            raise ValueError("Number of output domains in rules does not match number of output variable domains.")
         for i, var in enumerate(self.invar):
-            assert self.rules.shape[i] == var.num_domains
+            if self.rules.shape[i] != var.num_domains:
+                raise ValueError(f"Number of domains for variable {i} in rules does not match number of domains for variable {i}.")
 
-    def interpret(self, input:list, defuzz:str=None, plot:bool=False):
+    def interpret(self, input:list, defuzz:str=None, plot:bool=False) -> float | np.ndarray:
         """
         Determine output of fuzzy inference system from sclar valuers within invar universes.
 
         Parameters
         ----------
-        input : list
+        input : list of float
             List of scalar values to put in invar. List length must be the length of invar.
         defuzz : str
             Mode of defuzzification function to use from scikit-fuzzy. 
@@ -119,6 +121,12 @@ class FrugalityScore(FuzzySystem):
     """
     Implementation of frugality score system.
     """
+    RULES_3D = np.array([[[2,3,4],[1,2,3],[0,1,2]],
+                         [[1,2,3],[0,1,2],[0,0,1]],
+                         [[0,2,3],[0,0,2],[0,0,0]]])
+    RULES_2D = np.array([[2,3,4],
+                         [1,2,3],
+                         [0,1,2]])
     def __init__(self, trainable:bool=False, gpu:bool=False, cores:int=1, memory:int=2, system:str="DEFAULT", path:str="src/data", reference:str="system", scale:str="d", scale_inference:str="s", metric:str='accuracy'):
         """
         Class initialisation.
@@ -150,24 +158,17 @@ class FrugalityScore(FuzzySystem):
         
         performance =  PerformanceVariable(name=metric, num_points=num_points, path=path)
         score =  ScoreVariable(num_points=num_points)
+
+        energy_kwargs = dict(num_points=num_points, system=system, gpu=gpu, cores=cores, memory=memory, path=path, reference=reference)
+        
         if trainable:
-            energy_training = EnergyVariable(num_points=num_points, system=system, gpu=gpu, cores=cores, memory=memory, path=path, reference=reference, scale=scale)
-            energy_inference = EnergyVariable(num_points=num_points, system=system, gpu=gpu, cores=cores, memory=memory, path=path, reference=reference, scale=scale_inference)
-            rules = np.array([[[2,3,4],
-                               [1,2,3],
-                               [0,1,2]],
-                              [[1,2,3],
-                               [0,1,2],
-                               [0,0,1]],
-                              [[0,2,3],
-                               [0,0,2],
-                               [0,0,0]]])
+            energy_training = EnergyVariable(**energy_kwargs, scale=scale)
+            energy_inference = EnergyVariable(**energy_kwargs, scale=scale_inference)
+            rules = self.RULES_3D
             super().__init__(invar=[energy_training,energy_inference,performance], outvar=score, rules=rules)
         else:
-            energy = EnergyVariable(num_points=num_points, system=system, gpu=gpu, cores=cores, memory=memory, path=path, reference=reference, scale=scale)
-            rules = np.array([[2,3,4],
-                              [1,2,3],
-                              [0,1,2]])
+            energy = EnergyVariable(**energy_kwargs, scale=scale)
+            rules = self.RULES_2D
             super().__init__(invar=[energy,performance], outvar=score, rules=rules)
 
 class MLFrugalityScore(FrugalityScore):
@@ -175,13 +176,6 @@ class MLFrugalityScore(FrugalityScore):
     Implementation of frugality score system.
     """
     def __init__(self, gpu:bool=False, cores:int=1, memory:int=2, system:str="DEFAULT", path:str="src/data", reference:str="system",  scale:str="d", scale_inference:str="s", metric:str='accuracy'):
-        super().__init__(trainable=True, gpu=gpu, cores=cores, memory=memory, system=system, path=path, reference=reference, scale=scale, scale_inference=scale_inference, metric=metric)
-
-class NNFrugalityScore(FrugalityScore):
-    """
-    Implementation of frugality score system.
-    """
-    def __init__(self, gpu:bool=False, cores:int=1, memory:int=2, system:str="DEFAULT", path:str="src/data", reference:str="system", scale:str="d", scale_inference:str="s", metric:str='accuracy'):
         super().__init__(trainable=True, gpu=gpu, cores=cores, memory=memory, system=system, path=path, reference=reference, scale=scale, scale_inference=scale_inference, metric=metric)
 
 class TrackingFrugalityScore(FuzzySystem):
