@@ -1,0 +1,12 @@
+name: frugalscenarii
+description: Run a classification task on a benchmark dataset, and track the energy consumption of the process (implemented for ImageNet, MNIST and CIFAR-100).
+path: src/performance-tracking/experiments/frugalscenarii
+executable: src/performance-tracking/experiments/frugalscenarii/classif_scenarii.py
+executable_command: python
+tags:
+  - Classification
+  - Benchmark
+  - Energy consumption
+  - ImageNet
+  - MNIST
+  - CIFAR-100
