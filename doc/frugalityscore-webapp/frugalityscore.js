@@ -455,8 +455,8 @@ const MetadataCIFARfalse = {
   "data": DataCIFARfalse,
   "mode": "ML",
   "cpu": "Core i5-12600",
-  "cpupower": 11,
-  "ncpu": 5,
+  "cpupower": 10.8,
+  "ncpu": 6,
   "gpu": "NVIDIA RTX 4500 Ada Generation",
   "gpupower": 210,
   "ngpu": 1,
@@ -710,8 +710,8 @@ const MetadataCIFARtrue = {
   "data": DataCIFARtrue,
   "mode": "ML",
   "cpu": "Core i5-12600",
-  "cpupower": 11,
-  "ncpu": 5,
+  "cpupower": 10.8,
+  "ncpu": 6,
   "gpu": "NVIDIA RTX 4500 Ada Generation",
   "gpupower": 210,
   "ngpu": 1,
@@ -940,8 +940,8 @@ const MetadataMNIST = {
   "data": DataMNIST,
   "mode": "ML",
   "cpu": "Core i5-12600",
-  "cpupower": 11,
-  "ncpu": 5,
+  "cpupower": 10.8,
+  "ncpu": 6,
   "gpu": "NVIDIA RTX 4500 Ada Generation",
   "gpupower": 210,
   "ngpu": 1,
@@ -966,8 +966,8 @@ const MetadataImageNet = {
   "data": DataImageNet,
   "mode": "ML",
   "cpu": "Core i5-12600",
-  "cpupower": 11,
-  "ncpu": 5,
+  "cpupower": 10.8,
+  "ncpu": 6,
   "gpu": "NVIDIA RTX 4500 Ada Generation",
   "gpupower": 210,
   "ngpu": 1,
@@ -1009,12 +1009,9 @@ const MetadataBUTTERE = {
 ════════════════════════════════════════════════ */
 let text = "";
 async function loadPerformanceData() {
-  // const response = await fetch('./data/referencePerformance.json');
-  // performanceData = await response.json();
   const metricSelect = document.getElementById("metric");
   Object.keys(performanceData.performance_minmax).forEach((metric, index) => {
     const option = document.createElement("option");
-    // for display, the name of the metric is looked up in the performance_names mapping; the value remains the original metric key for internal use
     option.value = metric; option.textContent = performanceData.performance_names[metric];
     if (index === 0) option.selected = true;
     metricSelect.appendChild(option);
@@ -1022,8 +1019,6 @@ async function loadPerformanceData() {
 }
 
 async function loadCPUs() {
-  // const response = await fetch('./data/CPUs.csv');
-  // const text = await response.text();
   text = textCPU;
   const lines = text.split(/\r?\n/).slice(1);
   const sel = document.getElementById("cpu-select");
@@ -1040,8 +1035,6 @@ async function loadCPUs() {
 }
 
 async function loadGPUs() {
-  // const response = await fetch('./data/GPUs.csv');
-  // const text = await response.text();
   text = textGPU;
   const lines = text.split(/\r?\n/).slice(1);
   const sel = document.getElementById("gpu-select");
@@ -1107,15 +1100,15 @@ const PRESETS = {
 
 const PRESETS_ML = {
   normal:        { label:'Normal',          note:'Standard — balances energy and performance symmetrically.',
-    m: [[['very_low','low','medium'],['low','medium','high'],['medium','high','very_high']],[['very_low','very_low','low'],['very_low','low','medium'],['low','medium','high']],[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','medium']]] },
+    m: [[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','medium']],[['very_low','very_low','low'],['very_low','low','medium'],['low','medium','high']],[['very_low','low','medium'],['low','medium','high'],['medium','high','very_high']]] },
   lowcost:       { label:'Low cost',        note:'Energy savings dominate; performance is secondary.',
-    m: [[['very_low','low','medium'],['low','medium','high'],['medium','high','very_high']],[['very_low','very_low','low'],['very_low','low','medium'],['low','medium','high']],[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','medium']]] },
+    m: [[['very_low','very_low','very_low'],['very_low','low','medium'],['low','medium','medium']],[['very_low','very_low','low'],['low','medium','high'],['medium','high','high']],[['very_low','low','medium'],['medium','high','very_high'],['high','very_high','very_high']]] },
   perf:          { label:'Performance-first',note:'High performance always lifts score regardless of energy.',
-    m: [[['very_low','low','medium'],['low','medium','high'],['medium','high','very_high']],[['very_low','very_low','low'],['very_low','low','medium'],['low','medium','high']],[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','medium']]] },
+    m: [[['very_low','very_low','low'],['very_low','low','medium'],['very_low','medium','medium']],[['very_low','low','medium'],['very_low','medium','high'],['low','high','high']],[['very_low','medium','high'],['low','high','very_high'],['medium','very_high','very_high']]] },
   discriminative:{ label:'Discriminative',  note:'Avoids medium scores; promotes extreme frugality outputs.',
-    m: [[['very_low','low','medium'],['low','medium','high'],['medium','high','very_high']],[['very_low','very_low','low'],['very_low','low','medium'],['low','medium','high']],[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','medium']]] },
+    m: [[['very_low','very_low','very_low'],['very_low','very_low','medium'],['very_low','medium','medium']],[['very_low','very_low','low'],['very_low','low','high'],['low','high','high']],[['very_low','very_low','medium'],['very_low','medium','very_high'],['medium','very_high','very_high']]] },
   balanced:      { label:'Balanced',        note:'Avoids extremes; promotes medium scores across conditions.',
-    m: [[['very_low','low','medium'],['low','medium','high'],['medium','high','very_high']],[['very_low','very_low','low'],['very_low','low','medium'],['low','medium','high']],[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','medium']]] }
+    m: [[['very_low','very_low','very_low'],['very_low','very_low','low'],['very_low','low','low']],[['very_low','low','low'],['low','low','medium'],['low','medium','medium']],[['low','medium','medium'],['medium','medium','high'],['medium','high','high']]] },
 };
 
 let activePreset = 'normal';
@@ -1124,13 +1117,17 @@ let ruleMatrixML = JSON.parse(JSON.stringify(PRESETS_ML.normal.m));
 
 function applyPreset(name) {
   activePreset = name;
+  const isML = document.querySelector('input[name="systemType"]:checked')?.value==='ML';
+
   if (PRESETS[name]) ruleMatrix = JSON.parse(JSON.stringify(PRESETS[name].m));
+  if (PRESETS_ML[name]) ruleMatrixML = JSON.parse(JSON.stringify(PRESETS_ML[name].m));
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset===name));
-  const p = PRESETS[name];
+  const p = isML ? PRESETS_ML[name] : PRESETS[name];
   document.getElementById('matrix-note').innerHTML = p
     ? `<strong>${p.label}</strong> — ${p.note}`
     : 'Custom rule matrix — edited manually.';
-  renderMatrix();
+  if (isML) renderMatrixML();
+  else renderMatrix();
   updatePlot();
 }
 
@@ -1187,41 +1184,80 @@ function renderMatrixML() {
   const E_TRAIN_LABELS = ['E (train) = high','E (train) = medium','E (train) = low'];
   const E_TEST_LABELS = ['E (test) = high','E (test) = medium','E (test) = low'];
   for (let etri=0; etri<3; etri++) {
-    for (let etei=0; etei<3; etei++) {
-        const tr = document.createElement('tr');
-        const th = document.createElement('td');
-        th.className = 'row-label'; th.textContent = E_TEST_LABELS[etei];
-        if (etri === 0) {
-            th.textContent = E_TRAIN_LABELS[etri] + ' / ' + th.textContent;
-            th.rowSpan = 3;
-        }
-        tr.appendChild(th);
-        for (let pi=0; pi<3; pi++) {
+    for (let ei=0; ei<3; ei++) {
+      const tr = document.createElement('tr');
+      const th = document.createElement('td');
+      th.className = 'row-label'; 
+      th.textContent = ei===0 ? E_TRAIN_LABELS[etri] + ' / ' + E_TEST_LABELS[ei] : E_TEST_LABELS[ei];
+      tr.appendChild(th);
+      for (let pi=0; pi<3; pi++) {
         const td = document.createElement('td');
         const sel = document.createElement('select');
         sel.className = 'cell-select';
-        sel.dataset.etei = etei; sel.dataset.etri = etri; sel.dataset.pi = pi;
+        sel.dataset.etri = etri; sel.dataset.ei = ei; sel.dataset.pi = pi;
         OUTPUT_KEYS.forEach(k => {
-            const opt = document.createElement('option');
-            opt.value = k; opt.textContent = OUTPUT_LABELS_MAP[k];
-            sel.appendChild(opt);
+          const opt = document.createElement('option');
+          opt.value = k; opt.textContent = OUTPUT_LABELS_MAP[k];
+          sel.appendChild(opt);
         });
-        sel.value = ruleMatrixML[etri][etei][pi];
-        styleCell(sel, ruleMatrixML[etri][etei][pi]);
+        sel.value = ruleMatrixML[etri][ei][pi];
+        styleCell(sel, ruleMatrixML[etri][ei][pi]);
         sel.addEventListener('change', function() {
-            ruleMatrixML[this.dataset.etri][this.dataset.etei][this.dataset.pi] = this.value;
-            styleCell(this, this.value);
-            activePreset = 'custom';
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset==='custom'));
-            document.getElementById('matrix-note').innerHTML = 'Custom rule matrix — edited manually.';
-            updatePlot();
+          ruleMatrixML[this.dataset.etri][this.dataset.ei][this.dataset.pi] = this.value;
+          styleCell(this, this.value);
+          activePreset = 'custom';
+          document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset==='custom'));
+          document.getElementById('matrix-note').innerHTML = 'Custom rule matrix — edited manually.';
+          updatePlot();
         });
         td.appendChild(sel); tr.appendChild(td);
-        }
-        tbody.appendChild(tr);
-    }
+      }
+      tbody.appendChild(tr);
+    } 
   }
 }
+
+// function renderMatrixML() {
+//   const tbody = document.getElementById('matrix-tbody');
+//   tbody.innerHTML = '';
+//   const E_TRAIN_LABELS = ['E (train) = high','E (train) = medium','E (train) = low'];
+//   const E_TEST_LABELS = ['E (test) = high','E (test) = medium','E (test) = low'];
+//   for (let etri=0; etri<3; etri++) {
+//     for (let etei=0; etei<3; etei++) {
+//         const tr = document.createElement('tr');
+//         const th = document.createElement('td');
+//         th.className = 'row-label'; th.textContent = E_TEST_LABELS[etei];
+//         if (etri === 0) {
+//             th.textContent = E_TRAIN_LABELS[etri] + ' / ' + th.textContent;
+//             th.rowSpan = 3;
+//         }
+//         tr.appendChild(th);
+//         for (let pi=0; pi<3; pi++) {
+//         const td = document.createElement('td');
+//         const sel = document.createElement('select');
+//         sel.className = 'cell-select';
+//         sel.dataset.etei = etei; sel.dataset.etri = etri; sel.dataset.pi = pi;
+//         OUTPUT_KEYS.forEach(k => {
+//             const opt = document.createElement('option');
+//             opt.value = k; opt.textContent = OUTPUT_LABELS_MAP[k];
+//             sel.appendChild(opt);
+//         });
+//         sel.value = ruleMatrixML[etri][etei][pi];
+//         styleCell(sel, ruleMatrixML[etri][etei][pi]);
+//         sel.addEventListener('change', function() {
+//             ruleMatrixML[this.dataset.etri][this.dataset.etei][this.dataset.pi] = this.value;
+//             styleCell(this, this.value);
+//             activePreset = 'custom';
+//             document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset==='custom'));
+//             document.getElementById('matrix-note').innerHTML = 'Custom rule matrix — edited manually.';
+//             updatePlot();
+//         });
+//         td.appendChild(sel); tr.appendChild(td);
+//         }
+//         tbody.appendChild(tr);
+//     }
+//   }
+// }
 
 function styleCell(sel, key) {
   const c = LEVEL_COLORS[key];
@@ -1253,40 +1289,6 @@ function highlightFiringCells(e, p) {
 function scoreMFAt(x) {
   return [trimf(x,[0,0,25]),trimf(x,[0,25,50]),trimf(x,[25,50,75]),trimf(x,[50,75,100]),trimf(x,[75,100,100])];
 }
-
-// function computeScoreMembership(rules, perfMem, energyTrainMem) {
-//   const rules = [
-//     [0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1],
-//     [0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],
-//     [1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0]
-//   ];
-//   let sm = [0,0,0,0,0];
-//   for (let i=0; i<perfMem.length; i++)
-//     for (let j=0; j<energyTrainMem.length; j++) {
-//       const str = Math.min(perfMem[i], energyTrainMem[j]);
-//       for (let s=0; s<5; s++)
-//         sm[s] = Math.max(sm[s], Math.min(str, rules[j*energyTrainMem.length+i][s]));
-//     }
-//   return sm;
-// }
-
-// function computeScoreMLMembership(rules, perfMem, energyTrainMem, energyTestMem) {
-//   const rules = [
-//     [0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],
-//     [0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[1,0,0,0,0],[1,0,0,0,0],[0,1,0,0,0],
-//     [1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[1,0,0,0,0],[1,0,0,0,0],[0,1,0,0,0],[1,0,0,0,0],[1,0,0,0,0],[1,0,0,0,0]
-//   ];
-//   let sm = [0,0,0,0,0];
-//   for (let i=0; i<perfMem.length; i++)
-//     for (let j=0; j<energyTrainMem.length; j++)
-//       for (let k=0; k<energyTestMem.length; k++) {
-//         const str = Math.min(perfMem[i], energyTrainMem[j], energyTestMem[k]);
-//         const ruleIdx = (k*perfMem.length + j)*energyTrainMem.length + i;
-//         for (let s=0; s<5; s++)
-//           sm[s] = Math.max(sm[s], Math.min(str, rules[ruleIdx][s]));
-//       }
-//   return sm;
-// }
 
 function aggregateOutput(scoreMem) {
   const xs = Array.from({length:101},(_,i)=>i);
@@ -1333,27 +1335,6 @@ function runMatrixFIS(perfMem, energyTrainMem) {
   });
   return { fired, xs, ys };
 }
-
-// function runMatrixFISML(perfMem, energyTrainMem, energyTestMem) {
-//   const rules = getRules();
-//   const eKeys = ['high','medium','low'];
-//   const pKeys = ['low','medium','high'];
-//   const eTrainMem  = {high:energyTrainMem[2],medium:energyTrainMem[1],low:energyTrainMem[0]};
-//   const eTestMem   = {high:energyTestMem[2],medium:energyTestMem[1],low:energyTestMem[0]};
-//   const pMem  = {low:perfMem[0],medium:perfMem[1],high:perfMem[2]};
-//   const fired = rules.map(r => ({ strength:r.cond(eTrainMem,eTestMem,pMem), out:r.out, ant:r.ant }));
-
-//   // aggregate
-//   const xs = Array.from({length:101},(_,i)=>i);
-//   const ys = xs.map(x => {
-//     const mf = scoreMFAt(x);
-//     return fired.reduce((acc,f)=>{
-//       const outIdx = OUTPUT_KEYS.indexOf(f.out);
-//       return Math.max(acc, Math.min(f.strength, mf[outIdx]));
-//     }, 0);
-//   });
-//   return { fired, xs, ys };
-// }
 
 /* ════════════════════════════════════════════════
    PLOTLY HELPERS
@@ -1506,17 +1487,15 @@ function updatePlot() {
   const demoMode = document.querySelector('input[name="demoMode"]:checked')?.value;
   const isDemo = demoMode==='yes';
   document.getElementById("demo_control_scenario").style.display = isDemo?'block':'none';
-
+  renderMatrix();
   if (isML) {
     const et = parseFloat(document.getElementById("energy_test").value)||0;
     safeEt = Math.max(0, et);
     tlt = parseFloat(document.getElementById("energy_low_test").value)||0;
     tmt = parseFloat(document.getElementById("energy_medium_test").value)||0;
     tht = parseFloat(document.getElementById("energy_high_test").value)||0;
-  }
-
-  // Also run matrix FIS for rule activations display
-  const matrixResult = runMatrixFIS(perfMem, energyTrainMem);
+    renderMatrixML();
+  };
 
   const defuzzMethod = document.getElementById("defuzz-select").value;
   const { scoreMem, xs, ys, score, fired } = calcScore({
@@ -1527,6 +1506,9 @@ function updatePlot() {
       : null,
     defuzzMethod
   });
+
+  // Also run matrix FIS for rule activations display
+  const matrixResult = isML ? runMatrixFISML(perfMem, energyTrainMem, computeEnergyMembership(cpuFactor, cores, gpuFactor, ngpu, tlt, tmt, tht, safeEt)) : runMatrixFIS(perfMem, energyTrainMem);
 
   // ── Update score card ──
   const info = getScoreInfo(score);
