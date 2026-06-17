@@ -160,24 +160,20 @@
     <!-- ── TAB 0: INFO ── -->
     <div class="panel active" id="panel-info">
       <!-- include doc.html -->
-      <div class="grid-3">
+      <div class="grid-2">
           <div class="card">
-              <div class="card-head"><span class="card-title">Energy consumption in data processing</span></div>
+              <div class="card-head"><span class="card-title">Fuzzy-Based Frugality Score</span></div>
               <p style="font-size:14px;color:var(--text);font-style:bold;">
                   The machine learning community is increasingly aware of the environmental impact of data processing, especially since the emergence 
                   of deep learning models. The increase power consumption to train and deploy deep leanring models has set the machine learning community
                   to consider efficiency as a key aspect of their designs. However, recent studies [1, 2, 3] and regulations [4] tend to shift the focus 
-                  towards a different concept: frugality.
-              </p>
-          </div>
-          <div class="card">
-              <div class="card-head"><span class="card-title">Frugality over efficiency</span></div>
-              <p style="font-size:14px;color:var(--text);font-style:bold;">
-                  As most of the literature focuses on optimizing for efficiency, this dashboard encapsulates the concept of frugality.
-                  Efficiency aims for the maximization of the performance to energy ratio, with little to no consideration of the context of use. 
-                  Frugality, on the other hand, is context specific and aims to optimize the performance and energy consumption based on real-life 
-                  interpretable rules. As such, frugality questions the objectives of an application, and can lead to more sustainable, realistic, 
-                  and user-centric designs.
+                  towards a different concept: frugality. <br>
+                  <br>
+                  This dashboard implements a Mamdani fuzzy inference system (FIS) [5] to compute a frugality score based on performance 
+                  and energy consumption. Fuzzy logic is particularly suitable for multi-criteria decision-making tasks involving uncertainty and 
+                  human subjectivity [6, 7]. <br>
+                  As the performance and energy consumption of a system can be considered as human subjective concepts, a fuzzy-based approach 
+                  permits to formalize the reasoning process of the user and to compute an interpretable frugality score.
               </p>
           </div>
           <div class="card">
@@ -191,36 +187,56 @@
             </div>
           </div>
       </div>
-      <div class="card">
-          <div class="card-head"><span class="card-title">Fuzzy-Based Frugality Score</span></div>
-          <p style="font-size:14px;color:var(--text2);">
-              This dashboard implements a Mamdani fuzzy inference system (FIS) [5] to compute a frugality score based on performance 
-              and energy consumption. Fuzzy logic is particularly suitable for multi-criteria decision-making tasks involving uncertainty and 
-              human subjectivity [6, 7]. <br>
-              As the performance and energy consumption of a system can be considered as human subjective concepts, a fuzzy-based approach 
-              permits to formalize the reasoning process of the user and to compute an interpretable frugality score.
-          </p>
+      <div class="info-hero-strip">
+          <div class="info-concept-card">
+              <div class="info-icon-bg" aria-hidden="true"><i class="ti ti-bolt"></i></div>
+              <span class="info-tag info-tag-efficient">Efficiency</span>
+              <h3>Performance-to-energy ratio</h3>
+              <p>Efficiency focuses on the trade-off between performance and resource use, here energy consumption. Widely present in the literature, 
+                this concept takes little to no consideration of the context of use.</p>
+          </div>
+          <div class="info-concept-card">
+              <div class="info-icon-bg" aria-hidden="true"><i class="ti ti-leaf"></i></div>
+              <span class="info-tag info-tag-frugal">Frugality</span>
+              <h3>Context-aware sustainability</h3>
+              <p>Frugality is context specific and aims to optimize the performance and energy consumption based on real-life 
+                interpretable rules. As such, frugality questions the objectives of an application, and can lead to more sustainable, realistic, 
+                and user-centric designs.</p>
+          </div>
       </div>
       <div class="card">
-          <div class="card-head"><span class="card-title">Guide</span></div>
-          <p style="font-size:14px;color:var(--text2);">
-              Use the sidebar to input system parameters and toggle between tabs to explore the membership functions, rule base, and results. <br>
-              On the sidebar in order: <br>
-              - choose the system type to toggle between "NON-ML" system with consideration of only one energy consumption along performance, and "ML" 
-              system with energy consumptions in both training and inference,  <br>
-              - select your perfromance metric type for classical objective parametrisation from the literature, <br>
-              - select your CPU model to fetch factory power consumption, which you can still customize to your own situation, <br>
-              - select the number of CPU core used, default 1, <br>
-              - select your GPU model to fetch factory power consumption, which you can still customize to your own situation, <br>
-              - select the number of GPU used, default 0, <br>
-              - select time thresholds for the definition of the membership functions associated with the energy consumption ; you can see the effect on page "② Membership functions" <br>
-              - enter the performance and energy consumption(s) of you own experiment you wish to evaluate. <br>
-              <br>
-              Output is visible on page "① Result" <br>
-              Defuzzification mode can be selected on this page. <br>
-              <br>
-              Rule definition and customisation is availabel on page "③ Rule base"
-          </p>
+        <h3>How to use this dashboard?</h3>
+        <div class="info-steps-grid">
+          <div class="info-step-item">
+            <div class="info-step-num">1</div>
+            <div class="info-step-text"><strong>System type</strong>Toggle "NON-ML" for one energy consumption along performance, or "ML" 
+              for energy consumptions in both training and inference.</div>
+          </div>
+          <div class="info-step-item">
+            <div class="info-step-num">2</div>
+            <div class="info-step-text"><strong>Performance metric</strong>Select the performance metric type for classical objective parametrisation from the literature.</div>
+          </div>
+          <div class="info-step-item">
+            <div class="info-step-num">3</div>
+            <div class="info-step-text"><strong>Hardware</strong>Select CPU and GPU modeld, with power information fetched from the literature (customisable).</div>
+          </div>
+          <div class="info-step-item">
+            <div class="info-step-num">4</div>
+            <div class="info-step-text"><strong>Thresholds</strong>Select time thresholds for the definition of the membership functions associated with the energy consumption. (See page "① Membership functions")</div>
+          </div>
+          <div class="info-step-item">
+            <div class="info-step-num">5</div>
+            <div class="info-step-text"><strong>Your values</strong>Enter your measured performance and energy consumption(s)</div>
+          </div>
+          <div class="info-step-item">
+            <div class="info-step-num">6</div>
+            <div class="info-step-text"><strong>Rule definition</strong>Select your wished association rules on page "② Rule base".</div>
+          </div>
+          <div class="info-step-item">
+            <div class="info-step-num">7</div>
+            <div class="info-step-text"><strong>Results</strong>Select defuzzification mode and view the score <br>on "③ Result" along with rule activation outputs.</div>
+          </div>
+        </div>
       </div>
       <div class="card">
           <div class="card-head"><span class="card-title">Demo mode</span></div>
@@ -231,7 +247,7 @@
               2. Training of benchmark neural networks on ImageNet from scratch <br>
               3. Training of benchmark neural networks on CIFAR100 from scratch <br>
               4. Training of benchmark neural networks on CIFAR100 pretrained on ImageNet <br>
-              5. Training of rectangular-shaped multi-layer perceptrons with different depths on MNIST (from BUTTER-E) <br>
+              5. Training of rectangular-shaped multi-layer perceptrons with different depths on MNIST (from BUTTER-E [8]) <br>
           </p>
       </div>
       <div class="card" style="margin-top:12px;">
@@ -250,7 +266,10 @@
               Studies, vol. 7, pp. 1–13, Jan. 1975. <br>
               [6] F. A. Lootsma, Fuzzy Logic for Planning and Decision Making. Springer Science & Business Media, Mar. 2013. Google-Books-ID: 7GXmB-wAAQBAJ. <br>
               [7] L. Chen, G. Duan, S. Wang, and J. Ma, “A Choquet integral based fuzzy logic approach to solve uncertain multi-criteria decision making 
-              problem,” Expert Systems with Applications, vol. 149, p. 113303, July 2020.s
+              problem,” Expert Systems with Applications, vol. 149, p. 113303, July 2020.s <br>
+              [8] C. Tripp, J. Perr-Sauer, E. Bensen, J. Gafur, A. Nag, and A. Purkayastha, “Butter-e - energy consumption data for the butter empirical deep 
+              learning dataset.” Open Energy Data Initiative (OEDI), National RenewableEnergy Laboratory, https://doi.org/10.25984/2329316, 2022. Accessed: 
+              2026-01-13.
           </p>
       </div>
     </div> <!-- /panel-info --> 
@@ -366,41 +385,6 @@
       </div>
 
     </div><!-- /panel-result -->
-
-    <!-- ── TAB 4: PARAMS ── -->
-    <!-- <div class="panel" id="panel-params">
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-head"><span class="card-title">Energy consumption MFs</span><span class="chip">input</span></div>
-          <table class="params-table">
-            <thead><tr><th>Set</th><th>Type</th><th>Parameters</th></tr></thead>
-            <tbody>
-              <tr><td>low</td><td>Z-MF (zmf)</td><td>[ energy_low × power,  energy_medium × power ]</td></tr>
-              <tr><td>medium</td><td>Triangular</td><td>[ energy_low, energy_medium, energy_high ] × power</td></tr>
-              <tr><td>high</td><td>S-MF (smf)</td><td>[ energy_medium × power,  energy_high × power ]</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card">
-          <div class="card-head"><span class="card-title">Performance MFs</span><span class="chip">input · data-driven</span></div>
-          <p style="font-size:12px;color:var(--text3);margin-bottom:8px;">Loaded from <code>referencePerformance.json</code>. Supports trimf &amp; trapmf per metric.</p>
-          <p style="font-size:11px;color:var(--text3);" id="metric-info">Select a metric to inspect its parameters.</p>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><span class="card-title">Score output MFs</span><span class="chip">output · [0, 100]</span></div>
-        <table class="params-table">
-          <thead><tr><th>Set</th><th>Type</th><th>Parameters</th><th>Level</th></tr></thead>
-          <tbody>
-            <tr><td>1 · very low</td><td>trimf</td><td>[0, 0, 25]</td><td><span class="score-badge lvl-vl" style="font-size:10px;">very low</span></td></tr>
-            <tr><td>2 · low</td><td>trimf</td><td>[0, 25, 50]</td><td><span class="score-badge lvl-lo" style="font-size:10px;">low</span></td></tr>
-            <tr><td>3 · medium</td><td>trimf</td><td>[25, 50, 75]</td><td><span class="score-badge lvl-me" style="font-size:10px;">medium</span></td></tr>
-            <tr><td>4 · high</td><td>trimf</td><td>[50, 75, 100]</td><td><span class="score-badge lvl-hi" style="font-size:10px;">high</span></td></tr>
-            <tr><td>5 · very high</td><td>trimf</td><td>[75, 100, 100]</td><td><span class="score-badge lvl-vh" style="font-size:10px;">very high</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div> --> <!-- /panel-params --> 
 
   </div><!-- /content -->
 </div><!-- /main -->
