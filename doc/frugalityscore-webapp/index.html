@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h1>Frugality Scoring</h1>
+    <p>Mamdani fuzzy inference system</p>
+  </div>
+  <div class="sidebar-body">
+
+    <div class="field">
+      <label>System Type</label>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="systemType" value="Non ML" checked><span>Non-ML</span></label>
+        <label class="radio-pill"><input type="radio" name="systemType" value="ML"><span>ML</span></label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Performance metric</label>
+      <select id="metric"></select>
+    </div>
+
+    <div class="field">
+      <label>CPU Model</label>
+      <div class="inline-row">
+        <select id="cpu-select"></select>
+        <input type="number" id="cpu-power" class="compact" min="0" value="6">
+        <span class="unit">W</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>CPU Cores</label>
+      <input type="number" id="cores" min="1" value="1">
+    </div>
+
+    <div class="field">
+      <label>GPU Model</label>
+      <div class="inline-row">
+        <select id="gpu-select"></select>
+        <input type="number" id="gpu-power" class="compact" min="0" value="6">
+        <span class="unit">W</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Number of GPUs</label>
+      <input type="number" id="number-gpu" min="0" value="0">
+    </div>
+
+    <div class="field" id="energy_control">
+      <label>Train time limits (s)</label>
+      <div class="time-limits">
+        <div class="time-row">
+          <span class="time-badge">Low</span>
+          <input type="range" id="energy_low" min="0" max="100" value="10">
+          <input type="number" id="energyValueLow" class="compact" min="0" value="10">
+        </div>
+        <div class="time-row">
+          <span class="time-badge">Med</span>
+          <input type="range" id="energy_medium" min="0" max="100" value="50">
+          <input type="number" id="energyValueMedium" class="compact" min="0" value="50">
+        </div>
+        <div class="time-row">
+          <span class="time-badge">High</span>
+          <input type="range" id="energy_high" min="0" max="100" value="90">
+          <input type="number" id="energyValueHigh" class="compact" min="0" value="90">
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id="energy_control_test" style="display:none;">
+      <label>Test time limits (s)</label>
+      <div class="time-limits">
+        <div class="time-row">
+          <span class="time-badge">Low</span>
+          <input type="range" id="energy_low_test" min="0" max="100" value="10">
+          <input type="number" id="energyValueLow_test" class="compact" min="0" value="10">
+        </div>
+        <div class="time-row">
+          <span class="time-badge">Med</span>
+          <input type="range" id="energy_medium_test" min="0" max="100" value="50">
+          <input type="number" id="energyValueMedium_test" class="compact" min="0" value="50">
+        </div>
+        <div class="time-row">
+          <span class="time-badge">High</span>
+          <input type="range" id="energy_high_test" min="0" max="100" value="90">
+          <input type="number" id="energyValueHigh_test" class="compact" min="0" value="90">
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Demo mode</label>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="demoMode" value="yes"><span>Yes</span></label>
+        <label class="radio-pill"><input type="radio" name="demoMode" value="no" checked><span>No</span></label>
+      </div>
+    </div>
+
+    <div class="field" id="demo_control_scenario" style="display:none;">
+      <label>Scenario</label>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="demo_scenario" value="mnist"><span>1</span></label>
+        <label class="radio-pill"><input type="radio" name="demo_scenario" value="imagenet"><span>2</span></label>
+        <label class="radio-pill"><input type="radio" name="demo_scenario" value="cifar-scratch"><span>3</span></label>
+        <label class="radio-pill"><input type="radio" name="demo_scenario" value="cifar-pretrained"><span>4</span></label>
+        <label class="radio-pill"><input type="radio" name="demo_scenario" value="buttere"><span>5</span></label>
+      </div>
+    </div>
+
+  </div><!-- /sidebar-body -->
+  <div class="sidebar-footer">
+    <div class="field" style="margin-bottom:10px;">
+      <label>Performance</label>
+      <input type="number" id="perf" value="0" step="0.01">
+    </div>
+    <div class="field" id="energy_input" style="margin-bottom:10px;">
+      <label>Energy (J)</label>
+      <input type="number" id="energy" min="0" value="0">
+    </div>
+    <div class="field" id="energy_input_test" style="display:none; margin-bottom:10px;">
+      <label>Energy test (J)</label>
+      <input type="number" id="energy_test" min="0" value="0">
+    </div>
+    <label class="upload-area">
+      <input type="file" id="input-file" accept=".csv">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Upload CSV
+    </label>
+  </div>
+</aside>
+
+<!-- ══════════════════════ MAIN ══════════════════════ -->
+<div class="main">
+  <div class="topbar">
+    <button class="tab-btn active" onclick="switchTab('info')"    id="tab-info">⓪ Info</button>
+    <button class="tab-btn"        onclick="switchTab('mf')"      id="tab-mf">① Membership functions</button>
+    <button class="tab-btn"        onclick="switchTab('rules')"   id="tab-rules">② Rule base</button>
+    <button class="tab-btn"        onclick="switchTab('result')"  id="tab-result">③ Result</button>
+    <!-- <button class="tab-btn"        onclick="switchTab('params')"  id="tab-params">④ Parameters</button> -->
+    <div class="topbar-right">
+      <button class="theme-toggle" onclick="toggleTheme()">☽ Dark</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── TAB 0: INFO ── -->
+    <div class="panel active" id="panel-info">
+      <!-- include doc.html -->
+      <div class="grid-3">
+          <div class="card">
+              <div class="card-head"><span class="card-title">Energy consumption in data processing</span></div>
+              <p style="font-size:14px;color:var(--text);font-style:bold;">
+                  The machine learning community is increasingly aware of the environmental impact of data processing, especially since the emergence 
+                  of deep learning models. The increase power consumption to train and deploy deep leanring models has set the machine learning community
+                  to consider efficiency as a key aspect of their designs. However, recent studies [1, 2, 3] and regulations [4] tend to shift the focus 
+                  towards a different concept: frugality.
+              </p>
+          </div>
+          <div class="card">
+              <div class="card-head"><span class="card-title">Frugality over efficiency</span></div>
+              <p style="font-size:14px;color:var(--text);font-style:bold;">
+                  As most of the literature focuses on optimizing for efficiency, this dashboard encapsulates the concept of frugality.
+                  Efficiency aims for the maximization of the performance to energy ratio, with little to no consideration of the context of use. 
+                  Frugality, on the other hand, is context specific and aims to optimize the performance and energy consumption based on real-life 
+                  interpretable rules. As such, frugality questions the objectives of an application, and can lead to more sustainable, realistic, 
+                  and user-centric designs.
+              </p>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">Frugality score</span></div>
+            <div class="score-hero">
+              <div class="score-number" id="score-val-front" style="color:var(--accent)">—</div>
+              <div class="score-right">
+                <span class="score-badge" id="score-badge-front">—</span>
+                <span style="font-size:11px;color:var(--text3);">/ 100</span>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="card">
+          <div class="card-head"><span class="card-title">Fuzzy-Based Frugality Score</span></div>
+          <p style="font-size:14px;color:var(--text2);">
+              This dashboard implements a Mamdani fuzzy inference system (FIS) [5] to compute a frugality score based on performance 
+              and energy consumption. Fuzzy logic is particularly suitable for multi-criteria decision-making tasks involving uncertainty and 
+              human subjectivity [6, 7]. <br>
+              As the performance and energy consumption of a system can be considered as human subjective concepts, a fuzzy-based approach 
+              permits to formalize the reasoning process of the user and to compute an interpretable frugality score.
+          </p>
+      </div>
+      <div class="card">
+          <div class="card-head"><span class="card-title">Guide</span></div>
+          <p style="font-size:14px;color:var(--text2);">
+              Use the sidebar to input system parameters and toggle between tabs to explore the membership functions, rule base, and results. <br>
+              On the sidebar in order: <br>
+              - choose the system type to toggle between "NON-ML" system with consideration of only one energy consumption along performance, and "ML" 
+              system with energy consumptions in both training and inference,  <br>
+              - select your perfromance metric type for classical objective parametrisation from the literature, <br>
+              - select your CPU model to fetch factory power consumption, which you can still customize to your own situation, <br>
+              - select the number of CPU core used, default 1, <br>
+              - select your GPU model to fetch factory power consumption, which you can still customize to your own situation, <br>
+              - select the number of GPU used, default 0, <br>
+              - select time thresholds for the definition of the membership functions associated with the energy consumption ; you can see the effect on page "② Membership functions" <br>
+              - enter the performance and energy consumption(s) of you own experiment you wish to evaluate. <br>
+              <br>
+              Output is visible on page "① Result" <br>
+              Defuzzification mode can be selected on this page. <br>
+              <br>
+              Rule definition and customisation is availabel on page "③ Rule base"
+          </p>
+      </div>
+      <div class="card">
+          <div class="card-head"><span class="card-title">Demo mode</span></div>
+          <p style="font-size:14px;color:var(--text2);">
+              You can toggle DEMO MODE in the sidebar to choose an execution scenario applied on the data analysed within the linked paper.<br>
+              These scenarii are: <br>
+              1. Training of non-neural-network based classification methods on MNIST <br>
+              2. Training of benchmark neural networks on ImageNet from scratch <br>
+              3. Training of benchmark neural networks on CIFAR100 from scratch <br>
+              4. Training of benchmark neural networks on CIFAR100 pretrained on ImageNet <br>
+              5. Training of rectangular-shaped multi-layer perceptrons with different depths on MNIST (from BUTTER-E) <br>
+          </p>
+      </div>
+      <div class="card" style="margin-top:12px;">
+          <div class="card-head"><span class="card-title">References</span></div>
+          <p style="font-size:14px;color:var(--text2);">
+              [1] N. Girdhar, A. Raj, D. Sharma, V. Singh, A. Doucet, and M. Renz, “A comprehensive review of frugal artificial intelligence: challenges, 
+              applications, and the road to sustainable AI,” Soft Computing, vol. 29, pp. 4823–4856, July 2025. <br>
+              [2] R. Basu, P. Banerjee, and E. Sweeny, “Frugal Innovation: Core Competencies to Address Global Sustainability,” Journal of Management for 
+              Global Sustainability, vol. 1, Dec. 2013. <br>
+              [3] IPCC, “Summary for policymakers,” in Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth 
+              Assessment Report of the Intergovernmental Panel on Climate Change (P. Shukla, J. Skea, R. Slade, A. A. Khourdajie, R. van Diemen, D. McCollum, 
+              M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, and J. Malley, eds.), Cambridge, UK and New York, NY, 
+              USA: Cambridge University Press, 2022. <br>
+              [4] AFNOR, “AFNOR SPEC 2314: Référentiel général pour l'IA frugale – Mesurer et réduire l'impact environnemental de l'IA,” AFNOR Éditions, 2024.
+              [5] E. H. Mamdani and S. Assilian, “An experiment in linguistic synthesis with a fuzzy logic controller,” International Journal of Man-Machine 
+              Studies, vol. 7, pp. 1–13, Jan. 1975. <br>
+              [6] F. A. Lootsma, Fuzzy Logic for Planning and Decision Making. Springer Science & Business Media, Mar. 2013. Google-Books-ID: 7GXmB-wAAQBAJ. <br>
+              [7] L. Chen, G. Duan, S. Wang, and J. Ma, “A Choquet integral based fuzzy logic approach to solve uncertain multi-criteria decision making 
+              problem,” Expert Systems with Applications, vol. 149, p. 113303, July 2020.s
+          </p>
+      </div>
+    </div> <!-- /panel-info --> 
+
+    <!-- ── TAB 1: MF ── -->
+    <div class="panel" id="panel-mf">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Performance membership functions</span><span class="chip" id="mf-metric-chip">—</span></div>
+          <div class="plot-wrap" id="plot_membership_perf"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Energy membership functions (train)</span></div>
+          <div class="plot-wrap" id="plot_membership_energy"></div>
+        </div>
+      </div>
+      <div class="card" id="mf-test-card" style="display:none;">
+        <div class="card-head"><span class="card-title">Energy membership functions (test)</span></div>
+        <div class="plot-wrap" id="plot_membership_energy_test"></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="card-head"><span class="card-title">Score output membership functions</span></div>
+        <div class="plot-wrap" id="plot_membership_score"></div>
+      </div>
+    </div><!-- /panel-mf -->
+
+    <!-- ── TAB 2: RULES ── -->
+    <div class="panel" id="panel-rules">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Rule base matrix</span>
+          <span style="font-size:10px;color:var(--text3);">rows = energy · cols = performance · cells = score output</span>
+        </div>
+        <div class="preset-row" id="preset-row"></div>
+        <div style="overflow-x:auto;">
+          <table class="rule-matrix" id="rule-matrix-table">
+            <thead>
+              <tr>
+                <th class="rm-corner">E ↓ &nbsp; P →</th>
+                <th>P = low</th><th>P = medium</th><th>P = high</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-tbody"></tbody>
+          </table>
+        </div>
+        <p class="matrix-note" id="matrix-note"></p>
+      </div>
+    </div><!-- /panel-rules -->
+
+    <!-- ── TAB 3: RESULT ── -->
+    <div class="panel" id="panel-result">
+
+      <div class="defuzz-sel-wrap">
+        <label>Defuzzification</label>
+        <select id="defuzz-select">
+          <option value="centroid">Centroid (center of gravity)</option>
+          <option value="bisector">Bisector (area midpoint)</option>
+          <option value="som">SOM (smallest of maximum)</option>
+          <option value="mom">MOM (mean of maximum)</option>
+          <option value="lom">LOM (largest of maximum)</option>
+        </select>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Frugality score</span></div>
+          <div class="score-hero">
+            <div class="score-number" id="score-val" style="color:var(--accent)">—</div>
+            <div class="score-right">
+              <span class="score-badge" id="score-badge">—</span>
+              <span style="font-size:11px;color:var(--text3);">/ 100</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Energy membership</span></div>
+          <div class="mf-trio">
+            <div class="mf-mini"><div class="mf-mini-label">Low</div><div class="mf-mini-val" id="e-low">—</div></div>
+            <div class="mf-mini"><div class="mf-mini-label">Med</div><div class="mf-mini-val" id="e-med">—</div></div>
+            <div class="mf-mini"><div class="mf-mini-label">High</div><div class="mf-mini-val" id="e-high">—</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Performance membership</span></div>
+          <div class="mf-trio">
+            <div class="mf-mini"><div class="mf-mini-label">Low</div><div class="mf-mini-val" id="p-low">—</div></div>
+            <div class="mf-mini"><div class="mf-mini-label">Med</div><div class="mf-mini-val" id="p-med">—</div></div>
+            <div class="mf-mini"><div class="mf-mini-label">High</div><div class="mf-mini-val" id="p-high">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-head"><span class="card-title">Output fuzzy set activations</span></div>
+        <div class="gauge-5" id="output-gauges"></div>
+      </div>
+
+      <div class="grid-62">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Aggregated output &amp; defuzzification</span></div>
+          <div class="plot-wrap tall" id="plot_agg"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Rule activations</span></div>
+          <div class="rule-list" id="rule-act-list"></div>
+        </div>
+      </div>
+
+      <!-- CSV bar chart (hidden until file loaded) -->
+      <div class="card" id="bar-card" style="display:none; margin-top:12px;">
+        <div class="card-head"><span class="card-title">Scores by group (CSV)</span></div>
+        <div class="plot-wrap tall" id="bar_scores_display"></div>
+      </div>
+
+    </div><!-- /panel-result -->
+
+    <!-- ── TAB 4: PARAMS ── -->
+    <!-- <div class="panel" id="panel-params">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Energy consumption MFs</span><span class="chip">input</span></div>
+          <table class="params-table">
+            <thead><tr><th>Set</th><th>Type</th><th>Parameters</th></tr></thead>
+            <tbody>
+              <tr><td>low</td><td>Z-MF (zmf)</td><td>[ energy_low × power,  energy_medium × power ]</td></tr>
+              <tr><td>medium</td><td>Triangular</td><td>[ energy_low, energy_medium, energy_high ] × power</td></tr>
+              <tr><td>high</td><td>S-MF (smf)</td><td>[ energy_medium × power,  energy_high × power ]</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Performance MFs</span><span class="chip">input · data-driven</span></div>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:8px;">Loaded from <code>referencePerformance.json</code>. Supports trimf &amp; trapmf per metric.</p>
+          <p style="font-size:11px;color:var(--text3);" id="metric-info">Select a metric to inspect its parameters.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Score output MFs</span><span class="chip">output · [0, 100]</span></div>
+        <table class="params-table">
+          <thead><tr><th>Set</th><th>Type</th><th>Parameters</th><th>Level</th></tr></thead>
+          <tbody>
+            <tr><td>1 · very low</td><td>trimf</td><td>[0, 0, 25]</td><td><span class="score-badge lvl-vl" style="font-size:10px;">very low</span></td></tr>
+            <tr><td>2 · low</td><td>trimf</td><td>[0, 25, 50]</td><td><span class="score-badge lvl-lo" style="font-size:10px;">low</span></td></tr>
+            <tr><td>3 · medium</td><td>trimf</td><td>[25, 50, 75]</td><td><span class="score-badge lvl-me" style="font-size:10px;">medium</span></td></tr>
+            <tr><td>4 · high</td><td>trimf</td><td>[50, 75, 100]</td><td><span class="score-badge lvl-hi" style="font-size:10px;">high</span></td></tr>
+            <tr><td>5 · very high</td><td>trimf</td><td>[75, 100, 100]</td><td><span class="score-badge lvl-vh" style="font-size:10px;">very high</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div> --> <!-- /panel-params --> 
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script type="text/javascript" src="frugalityscore.js"></script>
+
+</body>
+</html>
