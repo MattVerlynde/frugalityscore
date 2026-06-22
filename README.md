@@ -1,6 +1,6 @@
 # frugalityscore : a fuzzy-logic based frugality scoring toolbox for machine learning applications
 
-This repository contains the code for the python package frugalityscore, associated with the article [*A FUZZY LOGIC BASED FRUGALITY EVALUATION SCORE*](doc/) to evaluate the frugality of a machine learning method based on its energy consumption and performance.
+This repository contains the code for the python package frugalityscore, associated with the article [*A FUZZY LOGIC BASED FRUGALITY EVALUATION SCORE*](doc/paper.pdf) to evaluate the frugality of a machine learning method based on its energy consumption and performance.
 
 > The popularity of efficiency as an optimization between performance and energy consumption rose within research in machine learning, following concerns in the ecological footprint of artificial intelligence (AI). Frugality emerged as a term that questions the quality of these notions. What is a good performance or a good energy consumption? These questions remain subjective, task-specific, and difficult to quantify. In this work, we propose a new frugality scoring method based upon fuzzy logic, that encapsulate these aspects with applications to common situations in machine learning. This score allows both for an absolute evaluation of the frugality of a method, and a relative analysis for the user’s own case study.
 
@@ -18,26 +18,42 @@ This repository contains the code for the python package frugalityscore, associa
 
 ```bash
 .
-├── frugalityscore
+├── doc
+│   ├── classification.py
+│   ├── environment.yml
+│   ├── experiment.yml
+│   ├── paper.pdf
+│   ├── performance-tracking
+│   │   ├── ...
+│   │   └── README.md
+│   ├── README.md
+│   └── webapp
+│       ├── frugalityscore.js
+│       ├── index.html
+│       └── style.css
+├── LICENSE
+├── pyproject.toml
+├── README.md
+├── setup_other.py
+├── src
 │   ├── data
 │   │   ├── CPUs.csv
 │   │   ├── GPUs.csv
 │   │   ├── referenceEnergy.csv
 │   │   └── referencePerformance.json
-│   ├── defuzz.py
-│   ├── __init__.py
-│   ├── membership.py
-│   ├── __pycache__
-│   │   ├── defuzz.cpython-311.pyc
-│   │   ├── __init__.cpython-311.pyc
-│   │   ├── membership.cpython-311.pyc
-│   │   ├── system.cpython-311.pyc
-│   │   └── variable.cpython-311.pyc
-│   ├── system.py
-│   └── variable.py
-├── LICENSE
-├── README.md
-└── setup.py
+│   ├── frugalityscore
+│   │   ├── defuzz.py
+│   │   ├── __init__.py
+│   │   ├── membership.py
+│   │   ├── system.py
+│   │   └── variable.py
+│   └── frugalityscore.egg-info
+│       ├── dependency_links.txt
+│       ├── PKG-INFO
+│       ├── SOURCES.txt
+│       └── top_level.txt
+└── tests
+    └── test.ipynb
 ```
 
 ## Installation <a name="install"></a>
