@@ -44,19 +44,22 @@ conda activate frugal-env
 
 ### Data installation <a name="data"></a>
 
-
+```bash
+git clone 
+```
 
 ## Usage <a name="use"></a>
 
 | File | Command line | Description |
 | ---- | ------------------ | ----------- |
+| [plot_scores.py](plot_scores.py)  | `python plot_scores.py --dataset [DATASET_NAME] --defuzz [DEFUZZIFICATION_FUNCTION] --output_dir [OUTPUT_DIRECTORY]` | Create score plots from the paper |
 | [classification.py](classification.py)  | `python classification.py --dataset [DATASET_NAME] --num_epochs [NUMBER_OF_EPOCHS] --batch_size [BATCH_SIZE] --learning_rate [LEARNING_RATE] --data_root [DATASET_PATH] --model [MODEL_NAME] --pretrained [true_IF_PRETRAINED] --device [gpu_OR_cpu] --storage_path [OUTPUT_STORAGE_PATH] --num_workers [NUMBER_OF_WORKERS] --seed [RANDOM_SEED] --prefetch_factor [PREFETCH_NUMBER_OF_BATCHES] --max_stagnation [MAX_NUM8EPOCHS_EARLY_STOPPING]` | Run classification task, on input dataset and model names |
-| [classif_scenarii.py](performance-tracking/experiments/frugalscenarii/classif_scenarii.py)  | `python classif_scenarii.py --dataset [DATASET_NAME] --num_epochs [NUMBER_OF_EPOCHS] --batch_size [BATCH_SIZE] --learning_rate [LEARNING_RATE] --data_root [DATASET_PATH] --model [MODEL_NAME] --pretrained [true_IF_PRETRAINED] --device [gpu_OR_cpu] --storage_path [OUTPUT_STORAGE_PATH] --num_workers [NUMBER_OF_WORKERS] --seed [RANDOM_SEED] --prefetch_factor [PREFETCH_NUMBER_OF_BATCHES] --max_stagnation [MAX_NUM8EPOCHS_EARLY_STOPPING]` | Run classification task, on input dataset and model names and track energy consumption using connected plug |
+| [classif_scenarii.py](tracking/experiments/frugalscenarii/classif_scenarii.py)  | `python classif_scenarii.py --dataset [DATASET_NAME] --num_epochs [NUMBER_OF_EPOCHS] --batch_size [BATCH_SIZE] --learning_rate [LEARNING_RATE] --data_root [DATASET_PATH] --model [MODEL_NAME] --pretrained [true_IF_PRETRAINED] --device [gpu_OR_cpu] --storage_path [OUTPUT_STORAGE_PATH] --num_workers [NUMBER_OF_WORKERS] --seed [RANDOM_SEED] --prefetch_factor [PREFETCH_NUMBER_OF_BATCHES] --max_stagnation [MAX_NUM8EPOCHS_EARLY_STOPPING]` | Run classification task, on input dataset and model names and track energy consumption using connected plug |
 
 ```bash
 qanat init .
 qanat experiment new -f experiment.yml
-qanat experiment run frugalscenarii --param_file src/performance-tracking/experiments/frugalscenarii/param_classif_imagenet.yaml
-qanat experiment run frugalscenarii --param_file src/performance-tracking/experiments/frugalscenarii/param_classif_cifar100.yaml
-qanat experiment run frugalscenarii --param_file src/performance-tracking/experiments/frugalscenarii/param_classif_mnist.yaml
+qanat experiment run frugalscenarii --param_file doc/tracking/experiments/frugalscenarii/param_classif_imagenet.yaml
+qanat experiment run frugalscenarii --param_file doc/tracking/experiments/frugalscenarii/param_classif_cifar100.yaml
+qanat experiment run frugalscenarii --param_file doc/tracking/experiments/frugalscenarii/param_classif_mnist.yaml
 ```

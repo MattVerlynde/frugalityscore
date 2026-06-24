@@ -12,9 +12,9 @@ import argparse
 
 from tqdm import trange, tqdm
 
-# ----------------------
+# ======================
 # Dataset configurations
-# ----------------------
+# ======================
  
 DATASET_CONFIGS = {
     "mnist": {
@@ -37,9 +37,9 @@ DATASET_CONFIGS = {
     },
 }
 
-# -------------------------------
+# ===============================
 # Dataloading and transformations
-# -------------------------------
+# ===============================
 
 def get_transforms(dataset_name):
     img_size = (256, 256)
@@ -169,9 +169,9 @@ def get_dataloaders(dataset_name, data_root, transform_train, transform_test, ba
     
     return trainloader, validloader, testloader
 
-# ----------------------
+# ====================
 # Model configurations
-# ----------------------
+# ====================
 
 def freeze_model(model):
     for param in model.parameters():
@@ -230,9 +230,9 @@ def create_model(name, num_classes, pretrained=True):
 
     return model.to(device)
 
-# --------
+# ========
 # Training
-# --------
+# ========
 
 def train(trainloader, validloader, model, lr=0.0001, num_epochs=100, testloader=None, max_stagn=5):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -315,9 +315,9 @@ def train(trainloader, validloader, model, lr=0.0001, num_epochs=100, testloader
 
     return results_train_df, results_val_df
 
-# ----------
+# ==========
 # Evaluation
-# ----------
+# ==========
 
 def test(testloader, model):
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -349,9 +349,9 @@ def test(testloader, model):
 
     return pd.DataFrame([[0, test_loss, test_acc.item()]], columns=['epoch', 'loss', 'accuracy'])
 
-# --------
+# ========
 # Plotting
-# --------
+# ========
 
 def plot_results(df, figsize=(10, 5)):
     fig, ax1 = plt.subplots(figsize=figsize)
@@ -366,9 +366,9 @@ def plot_results(df, figsize=(10, 5)):
 
     fig.tight_layout()
 
-# ---------
+# =========
 # Utilities
-# ---------
+# =========
 
 class CustomCompose(transforms.Compose):
         def __call__(self, img):
